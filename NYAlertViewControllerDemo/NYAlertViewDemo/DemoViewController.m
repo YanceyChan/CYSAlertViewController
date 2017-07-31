@@ -65,7 +65,7 @@ static NSString * const kTableViewCellReuseIdentifier = @"kTableViewCellReuseIde
 - (void)showCustomAlertViewWithActionCount:(NSInteger)actionCount {
     NYAlertViewController *alertViewController = [[NYAlertViewController alloc] initWithNibName:nil bundle:nil];
     alertViewController.title = NSLocalizedString(@"Example Title", nil);
-    alertViewController.message = NSLocalizedString(@"This alert uses the fade transition style! Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Donec id elit non mi porta gravida at eget metus.", nil);
+    alertViewController.message = NSLocalizedString(@"This alert uses the fade transition style! Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Donec id elit non mi porta gravida at eget metus.000000000002322323232323232323 2 323 23 23 23 23 23 23 23 23 ", nil);
     
     alertViewController.view.tintColor = self.view.tintColor;
     alertViewController.backgroundTapDismissalGestureEnabled = YES;

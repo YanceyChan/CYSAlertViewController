@@ -227,7 +227,7 @@
 @property (nonatomic) UIView *contentViewContainerView;
 @property (nonatomic) UIView *textFieldContainerView;
 @property (nonatomic) UIView *actionButtonContainerView;
-
+@property (nonatomic) UIView *lineView1;
 @end
 
 @implementation NYAlertView
@@ -242,6 +242,7 @@
         [self.alertBackgroundView setTranslatesAutoresizingMaskIntoConstraints:NO];
         self.alertBackgroundView.backgroundColor = [UIColor colorWithWhite:0.97f alpha:1.0f];
         self.alertBackgroundView.layer.cornerRadius = 6.0f;
+        self.alertBackgroundView.clipsToBounds = YES;
         [self addSubview:_alertBackgroundView];
         
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -279,6 +280,20 @@
         [self.actionButtonContainerView setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.actionButtonContainerView setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
         [self.alertBackgroundView addSubview:self.actionButtonContainerView];
+        
+        _lineView1 = [[UIView alloc] initWithFrame:CGRectZero];
+        [self.lineView1 setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self.lineView1 setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
+        [self.alertBackgroundView addSubview:self.lineView1];
+        _lineView1.backgroundColor = [UIColor redColor];
+        [_lineView1 addConstraint:[NSLayoutConstraint constraintWithItem:_lineView1
+                                                               attribute:NSLayoutAttributeHeight
+                                                               relatedBy:NSLayoutRelationEqual
+                                                                  toItem:nil
+                                                               attribute:NSLayoutAttributeNotAnAttribute
+                                                              multiplier:1
+                                                                constant:0.5]];
+        
         
         [self addConstraint:[NSLayoutConstraint constraintWithItem:self.alertBackgroundView
                                                          attribute:NSLayoutAttributeCenterX
@@ -343,18 +358,24 @@
                                                                                          metrics:nil
                                                                                            views:NSDictionaryOfVariableBindings(_textFieldContainerView)]];
         
+        [self.alertBackgroundView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_lineView1]|"
+                                                                                         options:0
+                                                                                         metrics:nil
+                                                                                           views:NSDictionaryOfVariableBindings(_lineView1)]];
+        
         [self.alertBackgroundView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_actionButtonContainerView]|"
                                                                                          options:0
                                                                                          metrics:nil
                                                                                            views:NSDictionaryOfVariableBindings(_actionButtonContainerView)]];
         
-        [self.alertBackgroundView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[_titleLabel]-2-[_messageTextView][_contentViewContainerView][_textFieldContainerView][_actionButtonContainerView]-|"
+        [self.alertBackgroundView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[_titleLabel]-2-[_messageTextView][_contentViewContainerView][_textFieldContainerView][_lineView1][_actionButtonContainerView]|"
                                                                                          options:0
                                                                                          metrics:nil
                                                                                            views:NSDictionaryOfVariableBindings(_titleLabel,
                                                                                                                                 _messageTextView,
                                                                                                                                 _contentViewContainerView,
                                                                                                                                 _textFieldContainerView,
+                                                                                                                                _lineView1,
                                                                                                                                 _actionButtonContainerView)]];
     }
     
@@ -510,12 +531,12 @@
                                                                                   multiplier:1.0f
                                                                                     constant:0.0f]];
         
-        [self.actionButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[firstButton]-[lastButton]-|"
+        [self.actionButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[firstButton][lastButton]|"
                                                                                                options:NSLayoutFormatAlignAllCenterY
                                                                                                metrics:nil
                                                                                                  views:NSDictionaryOfVariableBindings(firstButton, lastButton)]];
         
-        [self.actionButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[firstButton(40)]|"
+        [self.actionButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[firstButton(40)]|"
                                                                                                options:0
                                                                                                metrics:nil
                                                                                                  views:NSDictionaryOfVariableBindings(_contentViewContainerView, firstButton)]];
@@ -524,13 +545,14 @@
                                                                                                options:0
                                                                                                metrics:nil
                                                                                                  views:NSDictionaryOfVariableBindings(lastButton)]];
-    } else {
+    }
+    else {
         for (int i = 0; i < [actionButtons count]; i++) {
             UIButton *actionButton = actionButtons[i];
             
             [self.actionButtonContainerView addSubview:actionButton];
             
-            [self.actionButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[actionButton]-|"
+            [self.actionButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[actionButton]|"
                                                                                                    options:0
                                                                                                    metrics:nil
                                                                                                      views:NSDictionaryOfVariableBindings(actionButton)]];
@@ -541,7 +563,7 @@
                                                                                                      views:NSDictionaryOfVariableBindings(actionButton)]];
             
             if (i == 0) {
-                [self.actionButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[actionButton]"
+                [self.actionButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[actionButton]"
                                                                                                        options:0
                                                                                                        metrics:nil
                                                                                                          views:NSDictionaryOfVariableBindings(_contentViewContainerView, actionButton)]];
