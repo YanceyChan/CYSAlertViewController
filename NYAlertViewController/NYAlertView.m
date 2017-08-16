@@ -284,8 +284,8 @@
         _lineView1 = [[UIView alloc] initWithFrame:CGRectZero];
         [self.lineView1 setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.lineView1 setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
-        [self.alertBackgroundView addSubview:self.lineView1];
-        _lineView1.backgroundColor = [UIColor redColor];
+        [self.actionButtonContainerView addSubview:self.lineView1];
+        _lineView1.backgroundColor = [UIColor grayColor];
         [_lineView1 addConstraint:[NSLayoutConstraint constraintWithItem:_lineView1
                                                                attribute:NSLayoutAttributeHeight
                                                                relatedBy:NSLayoutRelationEqual
@@ -358,24 +358,19 @@
                                                                                          metrics:nil
                                                                                            views:NSDictionaryOfVariableBindings(_textFieldContainerView)]];
         
-        [self.alertBackgroundView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_lineView1]|"
-                                                                                         options:0
-                                                                                         metrics:nil
-                                                                                           views:NSDictionaryOfVariableBindings(_lineView1)]];
         
         [self.alertBackgroundView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_actionButtonContainerView]|"
                                                                                          options:0
                                                                                          metrics:nil
                                                                                            views:NSDictionaryOfVariableBindings(_actionButtonContainerView)]];
         
-        [self.alertBackgroundView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[_titleLabel]-2-[_messageTextView][_contentViewContainerView][_textFieldContainerView][_lineView1][_actionButtonContainerView]|"
+        [self.alertBackgroundView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[_titleLabel]-2-[_messageTextView][_contentViewContainerView][_textFieldContainerView][_actionButtonContainerView]|"
                                                                                          options:0
                                                                                          metrics:nil
                                                                                            views:NSDictionaryOfVariableBindings(_titleLabel,
                                                                                                                                 _messageTextView,
                                                                                                                                 _contentViewContainerView,
                                                                                                                                 _textFieldContainerView,
-                                                                                                                                _lineView1,
                                                                                                                                 _actionButtonContainerView)]];
     }
     
@@ -483,6 +478,7 @@
                                                                                             metrics:nil
                                                                                               views:NSDictionaryOfVariableBindings(textField)]];
         
+        
         // Pin the first text field to the top of the text field container view
         if (i == 0) {
             [self.textFieldContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[textField]"
@@ -500,7 +496,7 @@
         
         // Pin the final text field to the bottom of the text field container view
         if (i == ([textFields count] - 1)) {
-            [self.textFieldContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[textField]|"
+            [self.textFieldContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[textField]-|"
                                                                                                 options:0
                                                                                                 metrics:nil
                                                                                                   views:NSDictionaryOfVariableBindings(textField)]];
@@ -514,6 +510,16 @@
     }
     
     _actionButtons = actionButtons;
+    [self.actionButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_lineView1]|"
+                                                                                           options:0
+                                                                                           metrics:nil
+                                                                                             views:NSDictionaryOfVariableBindings(_lineView1)]];
+    
+    [self.actionButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_lineView1]"
+                                                                                     options:0
+                                                                                     metrics:nil
+                                                                                       views:NSDictionaryOfVariableBindings(_lineView1)]];
+    
     
     // If there are 2 actions, display the buttons next to each other. Otherwise, stack the buttons vertically at full width
     if ([actionButtons count] == 2) {
@@ -536,10 +542,10 @@
                                                                                                metrics:nil
                                                                                                  views:NSDictionaryOfVariableBindings(firstButton, lastButton)]];
         
-        [self.actionButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[firstButton(40)]|"
+        [self.actionButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_lineView1][firstButton(40)]|"
                                                                                                options:0
                                                                                                metrics:nil
-                                                                                                 views:NSDictionaryOfVariableBindings(_contentViewContainerView, firstButton)]];
+                                                                                                 views:NSDictionaryOfVariableBindings(_contentViewContainerView, _lineView1,firstButton)]];
         
         [self.actionButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[lastButton(40)]"
                                                                                                options:0
@@ -563,10 +569,10 @@
                                                                                                      views:NSDictionaryOfVariableBindings(actionButton)]];
             
             if (i == 0) {
-                [self.actionButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[actionButton]"
+                [self.actionButtonContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_lineView1][actionButton]"
                                                                                                        options:0
                                                                                                        metrics:nil
-                                                                                                         views:NSDictionaryOfVariableBindings(_contentViewContainerView, actionButton)]];
+                                                                                                         views:NSDictionaryOfVariableBindings(_contentViewContainerView, _lineView1,actionButton)]];
             } else {
                 UIButton *previousButton = actionButtons[i - 1];
                 
